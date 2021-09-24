@@ -6,7 +6,7 @@ metadata:
   labels:
     app: api
 spec:
-  replicas: 10
+  replicas: 1
   selector:
     matchLabels:
       tier: backend
@@ -18,15 +18,47 @@ spec:
         tier: backend
         environment: development
         component: api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "5000"
     spec:
+      automountServiceAccountToken: true
       imagePullSecrets:
         - name: acr
       containers:
-      - image: bastaws.azurecr.io/api:0.0.1
+      - image: bastaws.azurecr.io/api:0.0.5
         name: main
+        resources:
+          requests:
+            cpu: "25m"
+            memory: "48Mi"
+          limits:
+            cpu: "150m"
+            memory: "96Mi"
+        readinessProbe:
+          initialDelaySeconds: 3
+          httpGet:
+            port: http
+            path: "/healthz/ready"
+          timeoutSeconds: 2
+        livenessProbe:
+          initialDelaySeconds: 10
+          periodSeconds: 20
+          failureThreshold: 5
+          httpGet:
+            port: http
+            path: "/healthz/alive"
+        envFrom:
+          - configMapRef:
+              name: cfg
+              optional: true 
         env:
-        - name: ASPNETCORE_ENVIRONMENT
-          value: Development
+          - name: LOG_LEVEL
+            valueFrom:
+              configMapKeyRef:
+                key: LogSeverity
+                name: cfg
         ports:
           - containerPort: 5000
             name: http

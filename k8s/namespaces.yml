@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: basta-workshop
+  labels:
+    net.basta.location: mainz
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: basta-workshop-2
+  labels:
+    net.basta.location: mainz

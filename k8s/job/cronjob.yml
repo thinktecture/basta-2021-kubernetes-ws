@@ -1,0 +1,19 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cj
+  namespace: basta-workshop
+spec:
+  schedule: '* * * * *'
+  jobTemplate:
+    metadata:
+      name: cj-execution
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: acr
+          containers:
+          - name: main
+            image: bastaws.azurecr.io/job:0.0.1
+          restartPolicy: OnFailure

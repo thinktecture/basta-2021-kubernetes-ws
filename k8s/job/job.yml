@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: onetime-job
+  namespace: basta-workshop
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      imagePullSecrets:
+        - name: acr
+      containers:
+      - name: main
+        image: bastaws.azurecr.io/job:0.0.1
+      restartPolicy: Never
