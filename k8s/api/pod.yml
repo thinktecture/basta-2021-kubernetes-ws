@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api-live-1
+  namespace: basta-workshop
+  labels:
+    environment: development
+    com.thinktecture.conference: basta
+    com.thinktecture.customer: Contoso
+    com.thinktecture.owner: thorsten.hans
+    component: domain-api
+    tier: backend
+spec:
+  imagePullSecrets:
+    - name: acr
+  containers:
+  - name: main
+    image: bastaws.azurecr.io/api:0.0.1
+    env:
+      - name: ASPNETCORE_ENVIRONMENT
+        value: Development
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 5000
+        name: http

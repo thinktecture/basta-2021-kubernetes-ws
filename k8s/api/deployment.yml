@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: basta-workshop
+  labels:
+    app: api
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      tier: backend
+      environment: development
+      component: api
+  template:
+    metadata:
+      labels:
+        tier: backend
+        environment: development
+        component: api
+    spec:
+      imagePullSecrets:
+        - name: acr
+      containers:
+      - image: bastaws.azurecr.io/api:0.0.1
+        name: main
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        ports:
+          - containerPort: 5000
+            name: http
