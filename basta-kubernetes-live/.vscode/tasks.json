@@ -93,6 +93,26 @@
             "netCore": {
                 "appProject": "${workspaceFolder}/BASTA.Kubernetes.csproj"
             }
+        },
+        {
+            "label": "bridge-to-kubernetes.resource",
+            "type": "bridge-to-kubernetes.resource",
+            "resource": "api",
+            "resourceType": "service",
+            "ports": [
+                5000
+            ],
+            "targetCluster": "aks-basta-workshop",
+            "targetNamespace": "basta-workshop",
+            "useKubernetesServiceEnvironmentVariables": false
+        },
+        {
+            "label": "bridge-to-kubernetes.compound",
+            "dependsOn": [
+                "bridge-to-kubernetes.resource",
+                "build"
+            ],
+            "dependsOrder": "sequence"
         }
     ]
 }

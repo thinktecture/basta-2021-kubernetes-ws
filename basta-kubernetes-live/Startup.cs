@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Prometheus;
 
 namespace BASTA.Kubernetes
 {
@@ -44,9 +45,12 @@ namespace BASTA.Kubernetes
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BASTA.Kubernetes v1"));
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseHttpMetrics();
+            app.UseMetricServer();
 
             app.UseAuthorization();
 
